@@ -1,21 +1,35 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SimulatedDevice
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-            var simulator = new DeviceSimulator();
+            Run();
+        }
 
+        static void Run()
+        {
             // Create some devices initially, if devices are already created, avoid creation
-            var allDevices = simulator.GetDevices(5);
+            var devices = DeviceSimulator.GetDevices(5);
+            var events = DeviceSimulator.GetEvents(30).ToList();
+            var random = new Random();
 
-
-            Parallel.ForEach(allDevices, (device) =>
+            // Infinite loop
+            while (true)
             {
-                // Send events randomly and within random periods of time
-            });
+                Parallel.ForEach(devices, device =>
+                {
+                    // Send events randomly and within random periods of time
+                    device.SendEvent(events[random.Next(events.Count)]);
+                });
+
+                Task.Delay(500);
+            }
         }
     }
 }
