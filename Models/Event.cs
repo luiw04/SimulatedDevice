@@ -10,14 +10,17 @@ namespace SimulatedDevice
 
         [JsonPropertyName("payload_fields")]
         public EventPayload Payload { get; set; }
-
+        
+        [JsonPropertyName("metadata")]
         public Metadata Metadata { get; set; }
     }
 
     public class EventPayload
     {
+        [JsonPropertyName("eid")]
         public int Eid { get; set; }
 
+        [JsonPropertyName("level")]
         public int Level { get; set; }
     }
 
