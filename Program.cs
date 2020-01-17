@@ -25,10 +25,10 @@ namespace SimulatedDevice
                 Parallel.ForEach(devices, device =>
                 {
                     // Send events randomly and within random periods of time
-                    device.SendEvent(events[random.Next(events.Count)]);
+                    device.SendEventAsync(events[random.Next(events.Count)]).Wait();
                 });
 
-                Task.Delay(500);
+                Task.Delay(1).Wait();
             }
         }
     }

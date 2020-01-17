@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 public class Event
 {
     [JsonPropertyName("hardware_serial")]
-    public int DeviceId {get;set;}
+    public string DeviceId {get;set;}
 
     [JsonPropertyName("payload_fields")]
     public EventPayload Payload {get;set;}
