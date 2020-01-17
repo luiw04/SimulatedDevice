@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace SimulatedDevice
 {
@@ -16,16 +13,16 @@ namespace SimulatedDevice
         {
             // Create some devices initially, if devices are already created, avoid creation
             var devices = DeviceSimulator.GetDevices(5);
-            var events = DeviceSimulator.GetEvents(30).ToList();
-            var random = new Random();
 
             // Infinite loop
             while (true)
             {
                 Parallel.ForEach(devices, device =>
                 {
+                    var @event = DeviceSimulator.GetEvent(device, 100);
+
                     // Send events randomly and within random periods of time
-                    device.SendEventAsync(events[random.Next(events.Count)]).Wait();
+                    device.SendEventAsync(@event).Wait();
                 });
 
                 Task.Delay(1).Wait();

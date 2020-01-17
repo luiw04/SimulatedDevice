@@ -28,7 +28,7 @@ namespace SimulatedDevice
         public static Event GetEvent(Device device, int soapLevel)
         {
             var @event = new Faker<Event>()
-                .StrictMode(true)
+                //.StrictMode(true)
                 .RuleFor(e => e.DeviceId, device.Id)
                 .RuleFor(e => e.Payload.Eid, e => e.Random.Number(0,5))
                 .RuleFor(e => e.Payload.Level, () => soapLevel < 25 ? 100
