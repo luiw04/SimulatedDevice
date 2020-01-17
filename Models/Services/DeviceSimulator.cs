@@ -9,25 +9,27 @@ namespace SimulatedDevice
     {
         private static readonly Random Random = new Random();
 
-        public static IEnumerable<Device> GetDevices(int count)
+        public static IEnumerable<Device> GetDevices(int numOfDevices = 5)
         {
-            return new Faker<Device>()
+            if(numOfDevices > 5)
+            {
+                throw new ArgumentException("I don't have more than 5 devices :'(");
+            }
+
+            var devices = new Faker<Device>()
                 .StrictMode(true)
-                .RuleFor(d => d.Id, i => i.Random.Number(1, count - 1))
-                .RuleFor(d => d.Name, n => n.PickRandom(DeviceConstants.NAMES))
-                .RuleFor(d => d.Section, s => s.PickRandom(DeviceConstants.SECTIONS))
-                .Generate(count);
+                .RuleFor(d => d.Id, i => i.PickRandom(DeviceConstants.NAMES))
+                .RuleFor(d => d.Section, n => n.PickRandom(DeviceConstants.NAMES))
+                .Generate(numOfDevices);
+
+            return devices;
         }
 
-        public static IEnumerable<Event> GetEvents(int count)
+        public Event GetEvent(Device device)
         {
-            return new Faker<Event>()
+            var Event = new Faker<Event>()
                 .StrictMode(true)
-                .RuleFor(d => d.DeviceId, i => i.Random.Number(1, count - 1))
-                .RuleFor(d => d.Eid, i => i.Random.Number(1, count - 1))
-                .RuleFor(d => d.Level, i => i.Random.Number(1, count - 1))
-                .RuleFor(d => d.EventId, i => i.Random.Number(1, count - 1))
-                .Generate(count);
+                .RuleFor(e => e.DeviceId, device.Id);
         }
 
         public static void SendEvent(this Device device, Event @event)

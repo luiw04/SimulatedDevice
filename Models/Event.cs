@@ -1,17 +1,26 @@
 using System;
+using System.Text.Json.Serialization;
 
-namespace SimulatedDevice
+public class Event
 {
-    public class Event
-    {
-        public int DeviceId { get; set; }
+    [JsonPropertyName("hardware_serial")]
+    public int DeviceId {get;set;}
 
-        public int Eid { get; set; }
+    [JsonPropertyName("payload_fields")]
+    public EventPayload Payload {get;set;}
 
-        public int Level { get; set; }
+    public Metadata Metadata {get;set;}
+}
 
-        public int EventId { get; set; }
+public class EventPayload
+{
+    public int Eid {get;set;}
 
-        public DateTime Timestamp { get; set; }
-    }
+    public int Level {get;set;}
+}
+
+public class Metadata
+{
+    [JsonPropertyName("time")]
+    public DateTime Timestamp {get;set;}
 }
