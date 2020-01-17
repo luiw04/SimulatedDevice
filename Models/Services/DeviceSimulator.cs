@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Bogus;
+using System.Collections.Generic;
 
 public class DeviceSimulator
 {
@@ -7,9 +7,9 @@ public class DeviceSimulator
     {
         var devices = new Faker<Device>()
             .StrictMode(true)
-            .RuleFor(d => d.Id, i => i.Random.Number(1,numOfDevices - 1))
+            .RuleFor(d => d.Id, i => i.Random.Number(1, numOfDevices - 1))
             .RuleFor(d => d.Name, n => n.PickRandom(DeviceConstants.NAMES))
-            .RuleFor(d => d.Section, s => s.PickRandom(DeviceConstants.NAMES));
+            .RuleFor(d => d.Section, s => s.PickRandom(DeviceConstants.SECTIONS));
 
         // TODO: Return a list of numOfDevices, limit the number to the mocked data in constant arrays
         var devs = new List<Device>();
