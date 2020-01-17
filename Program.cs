@@ -19,7 +19,7 @@ namespace SimulatedDevice
             {
                 Parallel.ForEach(devices, device =>
                 {
-                    var @event = DeviceSimulator.GetEvent(device, 100);
+                    var @event = DeviceSimulator.GetEvent(device, device.Level);
 
                     // Send events randomly and within random periods of time
                     device.SendEventAsync(@event).Wait();

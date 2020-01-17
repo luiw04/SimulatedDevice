@@ -21,6 +21,7 @@ namespace SimulatedDevice
 
             var devices = new Faker<Device>()
                 .StrictMode(true)
+                .RuleFor(d => d.Level, 100)
                 .RuleFor(d => d.Id, i => i.PickRandom(DeviceConstants.NAMES))
                 .RuleFor(d => d.Section, n => n.PickRandom(DeviceConstants.NAMES))
                 .Generate(numOfDevices);
@@ -38,7 +39,7 @@ namespace SimulatedDevice
                 { 
                     Eid = e.Random.Number(0, 5),
                     Level = soapLevel < 25 ? 100
-                            : Random.Next(24, soapLevel)
+                            : Random.Next(26, soapLevel)
                 })
                 .Generate();
 
@@ -47,7 +48,7 @@ namespace SimulatedDevice
 
         public static async Task SendEventAsync(this Device device, Event @event)
         {
-            var delay = Random.Next(0, 10);
+            var delay = Random.Next(4, 12);
 
             await device.SendEventAsync(@event, TimeSpan.FromSeconds(delay));
         }
@@ -57,7 +58,9 @@ namespace SimulatedDevice
             await Task.Delay(delay);
             @event.Metadata.Timestamp = DateTime.UtcNow;
 
-            Console.WriteLine($"wazza dev {device.Id} with event {@event.Payload.Eid}");
+            Console.WriteLine($"wazza dev {device.Id} with level {@event.Payload.Level}");
+
+            device.Level = @event.Payload.Level;
 
             using var client = new HttpClient();
             
