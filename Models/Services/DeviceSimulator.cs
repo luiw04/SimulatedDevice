@@ -27,22 +27,23 @@ namespace SimulatedDevice
                 .RuleFor(d => d.Eid, i => i.Random.Number(1, count - 1))
                 .RuleFor(d => d.Level, i => i.Random.Number(1, count - 1))
                 .RuleFor(d => d.EventId, i => i.Random.Number(1, count - 1))
+                .RuleFor(d => d.Timestamp, i => DateTime.UtcNow)
                 .Generate(count);
         }
 
-        public static void SendEvent(this Device device, Event @event)
+        public static async Task SendEventAsync(this Device device, Event @event)
         {
-            var delay = Random.Next(0, 100);
+            var delay = Random.Next(0, 10);
 
-            device.SendEvent(@event, TimeSpan.FromMilliseconds(delay));
+            await device.SendEventAsync(@event, TimeSpan.FromSeconds(delay));
         }
 
-        public static void SendEvent(this Device device, Event @event, TimeSpan delay)
+        public static async Task SendEventAsync(this Device device, Event @event, TimeSpan delay)
         {
-            Task.Delay(delay);
+            await Task.Delay(delay);
             @event.Timestamp = DateTime.UtcNow;
 
-            Console.WriteLine($"wazza dev {device.Id} and event {@event.Eid}");
+            Console.WriteLine($"wazza dev {device.Id} with event {@event.Eid}");
         }
     }
 }
