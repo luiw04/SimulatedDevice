@@ -1,6 +1,9 @@
 using Bogus;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SimulatedDevice
@@ -30,9 +33,13 @@ namespace SimulatedDevice
             var @event = new Faker<Event>()
                 //.StrictMode(true)
                 .RuleFor(e => e.DeviceId, device.Id)
-                .RuleFor(e => e.Payload.Eid, e => e.Random.Number(0,5))
-                .RuleFor(e => e.Payload.Level, () => soapLevel < 25 ? 100
-                            : Random.Next(24, soapLevel))
+                .RuleFor(e => e.Metadata, e => new Metadata())
+                .RuleFor(e => e.Payload, e => new EventPayload
+                { 
+                    Eid = e.Random.Number(0, 5),
+                    Level = soapLevel < 25 ? 100
+                            : Random.Next(24, soapLevel)
+                })
                 .Generate();
 
             return @event;
@@ -51,6 +58,15 @@ namespace SimulatedDevice
             @event.Metadata.Timestamp = DateTime.UtcNow;
 
             Console.WriteLine($"wazza dev {device.Id} with event {@event.Payload.Eid}");
+
+            using var client = new HttpClient();
+            
+            var response = await client.PostAsync(
+                "http://3511cc01.ngrok.io/events",
+                new StringContent(JsonSerializer.Serialize(@event),
+                Encoding.UTF8, "application/json"));
+
+            response.EnsureSuccessStatusCode();
         }
     }
 }
